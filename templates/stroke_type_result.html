@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Stroke Type Predictor</title>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="style.css">
+
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand mx-auto" href="#">Stroke Type Predictor</a>
+    </div>
+  </nav>
+
+  <!-- Main Form Section -->
+  <div class="container mt-5">
+    <div class="form-section">
+      <h2 class="text-center mb-4">Answer the Following Questions</h2>
+
+      <form id="strokeForm" class="p-4 border rounded shadow-sm bg-light">
+
+        <!-- Blood Pressure Field -->
+        <div class="mb-4">
+          <label for="bpLevel" class="form-label">Blood Pressure Level (mmHg)</label>
+          <input type="number" class="form-control" id="bpLevel" name="bpLevel" placeholder="e.g., 120" required>
+        </div>
+
+        <div class="row g-3">
+
+          <!-- Symptom Questions -->
+          {% for label in [
+            'Blurred Vision', 'Confusion', 'Difficulty Speaking', 'Dizziness', 
+            'Headache', 'Loss of Balance', 'Numbness', 'Seizures', 
+            'Severe Fatigue', 'Weakness'
+          ] %}
+          <div class="col-md-6">
+            <label class="form-label">{{ label }}</label><br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="{{ label }}" value="1" id="{{ label | replace(' ', '') }}Yes">
+              <label class="form-check-label" for="{{ label | replace(' ', '') }}Yes">Yes</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="{{ label }}" value="0" id="{{ label | replace(' ', '') }}No">
+              <label class="form-check-label" for="{{ label | replace(' ', '') }}No">No</label>
+            </div>
+          </div>
+          {% endfor %}
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="mb-4">
+                <label class="form-label" for="stroke_history">Have you ever had a stroke?</label><br>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="stroke_history" value="1" id="stroke_historyYes" required>
+                  <label class="form-check-label" for="stroke_historyYes">Yes</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="stroke_history" value="0" id="stroke_historyNo" required>
+                  <label class="form-check-label" for="stroke_historyNo">No</label>
+                </div>
+              </div>
+            </div>
+          
+            <div class="col-md-6">
+              <div class="mb-4">
+                <label class="form-label" for="family_history">Has anyone in your family had a stroke?</label><br>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="family_history" value="1" id="family_historyYes" required>
+                  <label class="form-check-label" for="family_historyYes">Yes</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="family_history" value="0" id="family_historyNo" required>
+                  <label class="form-check-label" for="family_historyNo">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+
+        <div class="text-center mt-4">
+          <button type="button" onclick="submitForm()" class="btn btn-primary" style="background-color:black;color:white;border:solid 1px gray;">Predict Stroke Type</button>
+        </div>
+      </form>
+    </div>
+      <div class="mt-4 text-center">
+        <div id="result" class="alert alert-info d-none" role="alert"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer >
+  <footer class="text-center mt-5 mb-3">
+    <p class="mb-0">Developed by <strong>VEDHARSHA</strong><br></p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-2IwaUE3bLEpP7zjsBZT/TuhU+CFrrYUsUJc8eWrTVjUrk7FnVv6Gp5yK9vuGRpxG" crossorigin="anonymous">
+  </script>
+
+  <!-- Submission Script -->
+  <script>
+    function submitForm() {
+      const form = document.forms['strokeForm'];
+      const symptoms = [
+        "Blurred Vision", "Confusion", "Difficulty Speaking", "Dizziness",
+        "Headache", "Loss of Balance", "Numbness", "Seizures",
+        "Severe Fatigue", "Weakness"
+      ];
+
+      const answers = [];
+
+      for (let symptom of symptoms) {
+        const selected = form[symptom].value;
+        if (selected === undefined || selected === "") {
+          alert("Please answer all questions before submitting.");
+          return;
+        }
+        answers.push(parseInt(selected));
+      }
+
+      // Get BP level
+      const bpInput = document.getElementById('bpLevel');
+      const bpLevel = parseInt(bpInput.value);
+
+      if (isNaN(bpLevel)) {
+        alert("Please enter a valid blood pressure level.");
+        return;
+      }
+      // Get stroke history value
+      const stroke_history = document.querySelector('input[name="stroke_history"]:checked');
+      if (!stroke_history) {
+        alert("Please select a valid stroke history.");
+        return;
+      }
+
+      // Get family history value
+      const family_history = document.querySelector('input[name="family_history"]:checked');
+      if (!family_history) {
+        alert("Please select a valid family history.");
+        return;
+      }
+
+      fetch('/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ symptoms: answers, bp: bpLevel,stroke_history: parseInt(stroke_history.value),
+          family_history: parseInt(family_history.value) })
+      })
+      .then(response => response.json())
+      .then(data => {
+        window.location.href = `/stroke_type_result?type=${encodeURIComponent(data.prediction)}&risk=${encodeURIComponent(data.risk)}`;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert("An error occurred while processing your request. Please try again.");
+      });
+    }
+  </script>
+
+</body>
+</html>
