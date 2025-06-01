@@ -16,13 +16,25 @@ Models:
 5. Support Vector Machine
 6. Gaussian Naïve Bayes
 7. XGBoost
+   
+![image](https://github.com/user-attachments/assets/fe9a8d62-653a-4576-a4cb-6ffdc3b1b9c3)
 
 
 ## Module 2: Stroke Type classification
 Dataset: symptoms.csv extracted from the stroke prediction dataset (Kaggle)   
 Model: J48
+**Classification: No Stroke**
+![image](https://github.com/user-attachments/assets/5b8cec23-00fb-49e7-8039-26ff883367be)
+
+**Classification: Stroke type classification**
+![image](https://github.com/user-attachments/assets/fd279ebc-f3a9-49f3-a169-82cdcd04c3fd)
 
 ## Module 3: Stroke risk progression
 Dataset: Stroke prediction dataset (Kaggle)  
 Model: MLP (Neural Network)
 
+**Ischemic stroke type with risk progression**
+![image](https://github.com/user-attachments/assets/c094f468-ae46-4775-88da-ab0be1bc195c)
+
+**Haemorrhage stroke type with risk progression**
+![image](https://github.com/user-attachments/assets/0fde1ee1-10ba-4338-add2-f91dced7a18a)
